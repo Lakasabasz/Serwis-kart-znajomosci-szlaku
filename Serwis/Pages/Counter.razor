@@ -1,19 +1,43 @@
 ﻿@page "/counter"
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
 
-<p role="status">Current count: @currentCount</p>
+<p role="status">Current count:
+    @(_stateContainer?.StoredValue ?? 0)</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="IncrementCount">Zwiększ</button>
+<button class="btn btn-danger" @onclick="ResetCount">Resetuj</button>
 
 @code {
-    private int currentCount = 0;
+    private StateContainer? _stateContainer;
+
+    protected override async void OnInitialized()
+    {
+        LocalStorage.Changed += (_, _) => StateHasChanged();
+        if (await LocalStorage.ContainKeyAsync("stateContainer"))
+            _stateContainer = await LocalStorage.GetItemAsync<StateContainer>("stateContainer");
+        else
+            _stateContainer = new StateContainer();
+        _stateContainer.PropertyChanged += StateContainerOnPropertyChanged;
+        StateHasChanged();
+    }
+
+    private async void StateContainerOnPropertyChanged(object? sender, EventArgs e)
+    {
+        await LocalStorage.SetItemAsync("stateContainer", sender);
+    }
 
     private void IncrementCount()
     {
-        currentCount++;
+        if (_stateContainer != null) _stateContainer.StoredValue += 1;
+    }
+
+    private void ResetCount()
+    {
+        if (_stateContainer != null) _stateContainer.StoredValue = 0;
     }
 
 }
