@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using Serwis.Models
+@inherits LayoutComponentBase
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <div class="page">
     <div class="sidebar">
@@ -9,9 +11,17 @@
 
         <div class="top-row px-4">
             <div class="flex-row">
-                <NavLink href="logout">
-                    Wyloguj
-                </NavLink>
+                @if (_userData?.Token is not null)
+                {
+                    <NavLink href="logout">
+                        Wyloguj
+                    </NavLink>
+                }
+                else
+                {
+                    <NavLink href="login">Zaloguj</NavLink>
+                    <NavLink href="register">Zarejestruj</NavLink>
+                }
                 <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
             </div>
         </div>
@@ -21,3 +31,14 @@
         </article>
     </main>
 </div>
+
+@code
+{
+    private UserData? _userData;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (await LocalStorage.ContainKeyAsync(nameof(UserData)))
+            _userData = await LocalStorage.GetItemAsync<UserData>(nameof(UserData));
+    }
+}

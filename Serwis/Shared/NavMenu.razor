@@ -1,4 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Serwis.Models
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Karta Znajomości Szlaku</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -11,9 +14,36 @@
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+                <span class="oi oi-home" aria-hidden="true"></span> Strona główna
             </NavLink>
         </div>
+        @if (_userData?.Token is null)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="offer">
+                    <span class="oi oi-cart" aria-hidden="true"></span> Oferta
+                </NavLink>
+            </div>
+        }
+        else
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="panel">
+                    <span class="oi oi-person" aria-hidden="true"></span> Panel
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="generator">
+                    <span class="oi oi-map" aria-hidden="true"></span> Generator
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="history">
+                    <span class="oi oi-book" aria-hidden="true"></span> Historia
+                </NavLink>
+            </div>
+        }
+        <hr/>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="counter">
                 <span class="oi oi-plus" aria-hidden="true"></span> Counter
@@ -28,13 +58,22 @@
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
+    private bool _collapseNavMenu = true;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
+
+    private UserData? _userData;
 
     private void ToggleNavMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        _collapseNavMenu = !_collapseNavMenu;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (await LocalStorage.ContainKeyAsync(nameof(UserData)))
+            _userData = await LocalStorage.GetItemAsync<UserData>(nameof(UserData));
+        StateHasChanged();
     }
 
 }
