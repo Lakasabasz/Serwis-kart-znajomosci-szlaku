@@ -10,6 +10,6 @@ stages:
 sast:
   stage: test
   before_script:
-    - wget https://dot.net/v1/dotnet-install.sh && sh dotnet-install.sh --channel 7.0
+    - wget https://dot.net/v1/dotnet-install.sh && .\dotnet-install.sh --channel 7.0
 include:
 - template: Security/SAST.gitlab-ci.yml
