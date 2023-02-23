@@ -1,0 +1,63 @@
+﻿@page "/tool-login-state"
+@using Serwis.Models
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject PageRefreshService RefreshService
+<PageTitle>Narzędzia</PageTitle>
+<h2>Stan logowania</h2>
+<hr/>
+<div class="flex-row">
+    Obecnie: @LoggedIn
+    <button class="btn btn-success" @onclick="SetLogin">Zaloguj</button>
+    <button class="btn btn-warning" @onclick="ResetLogin">Wyloguj</button>
+    <button class="btn btn-danger" @onclick="RemoveUserData">Wyczyść</button>
+</div>
+@code {
+    private bool _loggedIn;
+
+    private string LoggedIn => _loggedIn ? "zalogowany" : "nie zalogowany";
+    private UserData? _userData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (await LocalStorage.ContainKeyAsync(nameof(UserData)))
+            _userData = await LocalStorage.GetItemAsync<UserData>(nameof(UserData));
+        else _userData = new UserData();
+        _loggedIn = _userData?.Token is not null;
+        StateHasChanged();
+    }
+
+    private async Task _save()
+    {
+        await LocalStorage.SetItemAsync(nameof(UserData), _userData);
+    }
+
+    private async Task SetLogin()
+    {
+        _userData ??= new UserData();
+        _userData.Token = "notEmpty";
+        await _save();
+        _loggedIn = true;
+        StateHasChanged();
+        RefreshService.RequestRefresh();
+    }
+
+    private async Task ResetLogin()
+    {
+        _userData ??= new UserData();
+        _userData.Token = null;
+        _loggedIn = false;
+        await _save();
+        StateHasChanged();
+        RefreshService.RequestRefresh();
+    }
+
+    private async void RemoveUserData()
+    {
+        await LocalStorage.RemoveItemAsync(nameof(UserData));
+        _userData = null;
+        _loggedIn = false;
+        StateHasChanged();
+        RefreshService.RequestRefresh();
+    }
+
+}

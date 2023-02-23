@@ -1,6 +1,7 @@
 ﻿@using Serwis.Models
 @inherits LayoutComponentBase
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject PageRefreshService RefreshService
 
 <div class="page">
     <div class="sidebar">
@@ -40,5 +41,15 @@
     {
         if (await LocalStorage.ContainKeyAsync(nameof(UserData)))
             _userData = await LocalStorage.GetItemAsync<UserData>(nameof(UserData));
+        RefreshService.PageRefreshRequestEvent += async (_, _) => await StateHasChanged();
+        base.StateHasChanged();
+    }
+
+    private new async Task StateHasChanged()
+    {
+        if (await LocalStorage.ContainKeyAsync(nameof(UserData)))
+            _userData = await LocalStorage.GetItemAsync<UserData>(nameof(UserData));
+        else _userData = null;
+        base.StateHasChanged();
     }
 }

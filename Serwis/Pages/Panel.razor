@@ -1,0 +1,17 @@
+﻿@page "/panel"
+@using Serwis.Models
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+<h3>Panel</h3>
+
+@code {
+    private UserData _userData = null!;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (await LocalStorage.ContainKeyAsync(nameof(UserData)))
+            _userData = await LocalStorage.GetItemAsync<UserData>(nameof(UserData));
+        if(_userData?.Token is null) NavigationManager.NavigateTo("/login");
+    }
+
+}
