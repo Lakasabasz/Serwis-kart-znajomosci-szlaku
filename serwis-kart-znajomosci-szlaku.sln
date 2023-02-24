@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serwis", "Serwis\Serwis.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{FB58A6C7-BDB1-49B5-A24E-20B262CD7971}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiProtocol", "ApiProtocol\ApiProtocol.csproj", "{AAFA2E8C-CAE5-467B-A9E5-8A73FF0E9242}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{FB58A6C7-BDB1-49B5-A24E-20B262CD7971}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB58A6C7-BDB1-49B5-A24E-20B262CD7971}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB58A6C7-BDB1-49B5-A24E-20B262CD7971}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAFA2E8C-CAE5-467B-A9E5-8A73FF0E9242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAFA2E8C-CAE5-467B-A9E5-8A73FF0E9242}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAFA2E8C-CAE5-467B-A9E5-8A73FF0E9242}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAFA2E8C-CAE5-467B-A9E5-8A73FF0E9242}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
