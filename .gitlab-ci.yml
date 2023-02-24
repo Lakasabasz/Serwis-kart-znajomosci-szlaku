@@ -9,5 +9,8 @@ stages:
 - test
 sast:
   stage: test
+security-code-scan-sast:
+  before_script:
+    - wget https://dot.net/v1/dotnet-install.sh && bash dotnet-install.sh --channel 7.0
 include:
 - template: Security/SAST.gitlab-ci.yml
