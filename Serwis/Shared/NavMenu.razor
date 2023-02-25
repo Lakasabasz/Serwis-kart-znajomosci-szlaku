@@ -15,14 +15,14 @@
     <nav class="flex-col">
         <div class="nav-item px-3">
             <NavLink class="inline-block py-2 px-4 no-underline" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Strona główna
+                <span class="material-icons">home</span> Strona główna
             </NavLink>
         </div>
         @if (_userData?.Token is null)
         {
             <div class="nav-item px-3">
                 <NavLink class="inline-block py-2 px-4 no-underline" href="offer">
-                    <span class="oi oi-cart" aria-hidden="true"></span> Oferta
+                    <span class="material-icons">shopping_cart</span> Oferta
                 </NavLink>
             </div>
         }
@@ -30,41 +30,41 @@
         {
             <div class="nav-item px-3">
                 <NavLink class="inline-block py-2 px-4 no-underline" href="panel">
-                    <span class="oi oi-person" aria-hidden="true"></span> Panel
+                    <span class="material-icons" aria-hidden="true">person</span> Panel
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="inline-block py-2 px-4 no-underline" href="generator">
-                    <span class="oi oi-map" aria-hidden="true"></span> Generator
+                    <span class="material-icons" aria-hidden="true">map</span> Generator
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="inline-block py-2 px-4 no-underline" href="history">
-                    <span class="oi oi-book" aria-hidden="true"></span> Historia
+                    <span class="material-icons" aria-hidden="true">book</span> Historia
                 </NavLink>
             </div>
         }
         <hr/>
         <div class="nav-item px-3">
             <NavLink class="inline-block py-2 px-4 no-underline" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+                <span class="material-icons" aria-hidden="true">add</span> Counter
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="inline-block py-2 px-4 no-underline" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+                <span class="material-icons" aria-hidden="true">list</span> Fetch data
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="inline-block py-2 px-4 no-underline" href="tool-login-state">
-                <span class="oi oi-wrench"></span> Narzędzia
+                <span class="material-icons">build</span> Narzędzia
             </NavLink>
         </div>
     </nav>
 </div>
 
 @code {
-    private bool _collapseNavMenu = true;
+    private bool _collapseNavMenu = false;
 
     private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
 
