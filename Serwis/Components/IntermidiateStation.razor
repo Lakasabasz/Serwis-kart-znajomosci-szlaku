@@ -1,0 +1,30 @@
+﻿<div class="d-flex flex-row">
+    <span class="bi bi-arrow-right"></span>
+    @if (_used)
+    {
+        <div>
+            <RadzenAutoComplete/>
+            <button class="btn btn-close" @onclick="Delete"></button>
+        </div>
+    }
+    else
+    {
+        <button class="btn" @onclick="Create"><span class="bi bi-plus"></span></button>
+    }
+</div>
+@code {
+    private bool _used;
+
+    private void Create()
+    {
+        _used = true;
+        StateHasChanged();
+    }
+
+    private void Delete()
+    {
+        _used = false;
+        StateHasChanged();
+    }
+
+}

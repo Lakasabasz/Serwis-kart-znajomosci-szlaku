@@ -2,26 +2,26 @@
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @inject PageRefreshService RefreshService
 
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Karta Znajomości Szlaku</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
+<div class="top-row pl-3 relative flex flex-wrap items-center content-between py-3 px-4 text-white">
+    <div class="container mx-auto sm:px-4 max-w-full mx-auto sm:px-4">
+        <a class="inline-block pt-1 pb-1 mr-4 text-lg whitespace-no-wrap" href="">Karta Znajomości Szlaku</a>
+        <button title="Navigation menu" class="py-1 px-2 text-md leading-normal bg-transparent border border-transparent rounded" @onclick="ToggleNavMenu">
+            <span class="px-5 py-1 border border-gray-600 rounded"></span>
         </button>
     </div>
 </div>
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
+    <nav class="flex-col">
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+            <NavLink class="inline-block py-2 px-4 no-underline" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Strona główna
             </NavLink>
         </div>
         @if (_userData?.Token is null)
         {
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="offer">
+                <NavLink class="inline-block py-2 px-4 no-underline" href="offer">
                     <span class="oi oi-cart" aria-hidden="true"></span> Oferta
                 </NavLink>
             </div>
@@ -29,34 +29,34 @@
         else
         {
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="panel">
+                <NavLink class="inline-block py-2 px-4 no-underline" href="panel">
                     <span class="oi oi-person" aria-hidden="true"></span> Panel
                 </NavLink>
             </div>
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="generator">
+                <NavLink class="inline-block py-2 px-4 no-underline" href="generator">
                     <span class="oi oi-map" aria-hidden="true"></span> Generator
                 </NavLink>
             </div>
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="history">
+                <NavLink class="inline-block py-2 px-4 no-underline" href="history">
                     <span class="oi oi-book" aria-hidden="true"></span> Historia
                 </NavLink>
             </div>
         }
         <hr/>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
+            <NavLink class="inline-block py-2 px-4 no-underline" href="counter">
                 <span class="oi oi-plus" aria-hidden="true"></span> Counter
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
+            <NavLink class="inline-block py-2 px-4 no-underline" href="fetchdata">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="tool-login-state">
+            <NavLink class="inline-block py-2 px-4 no-underline" href="tool-login-state">
                 <span class="oi oi-wrench"></span> Narzędzia
             </NavLink>
         </div>

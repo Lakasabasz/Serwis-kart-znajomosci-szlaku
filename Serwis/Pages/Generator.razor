@@ -1,17 +1,59 @@
 ﻿@page "/generator"
 @using Serwis.Models
+@using ApiProtocol.Models
+@using System.Collections.ObjectModel
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
-<h3>Generator</h3>
+<PageTitle>Generator</PageTitle>
+
+<div class="d-flex flex-column">
+    <div class="d-flex flex-row fw-bold">
+        <p class="me-2">Jesteś na etapie:</p>
+        <p class="me-2 text-success">Wyznaczanie ciągu stacji</p>
+        <p class="me-2 @(Stage > 0 ? "text-success" : "text-secondary")"><span class="oi oi-arrow-right"></span> Weryfikacja szlaków</p>
+        <p class="me-2 @(Stage > 1 ? "text-success" : "text-secondary")"><span class="oi oi-arrow-right"></span> Uzupełnienia informacji</p>
+        <p class="me-2 @(Stage > 2 ? "text-success" : "text-secondary")"><span class="oi oi-arrow-right"></span> Generowania raportu</p>
+    </div>
+    @if (Stage == 0)
+    {
+        <p>Wymagane stacje:</p>
+        <div class="d-flex flex-row">
+            <RadzenAutoComplete Placeholder="Stacja początkowa" />
+            <IntermidiateStation />
+            <span class="oi oi-arrow-right mx-2"></span>
+            <RadzenAutoComplete Placeholder="Stacja końcowa" />
+        </div>
+    }
+    <div class="d-flex">
+        <button @onclick="UpdateStage" class="btn-primary">Przełącz stan</button>
+    </div>
+</div>
 
 @code {
     private UserData _userData = null!;
-    
+    private int _stage;
+
+    private int Stage
+    {
+        get => _stage;
+        set
+        {
+            _stage = value;
+            StateHasChanged();
+        }
+    }
+
+
     protected override async Task OnInitializedAsync()
     {
         if (await LocalStorage.ContainKeyAsync(nameof(UserData)))
             _userData = await LocalStorage.GetItemAsync<UserData>(nameof(UserData));
         if(_userData?.Token is null) NavigationManager.NavigateTo("/login");
+    }
+
+    private void UpdateStage()
+    {
+        Stage = (Stage + 1) % 4;
     }
 
 }

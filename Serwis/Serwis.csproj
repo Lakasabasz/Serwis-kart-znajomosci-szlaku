@@ -10,6 +10,20 @@
         <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.3" PrivateAssets="all" />
+        <PackageReference Include="Radzen.Blazor" Version="4.7.2" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ApiProtocol\ApiProtocol.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css.map" />
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="npm run buildcss" />
+    </Target>
 
 </Project>
