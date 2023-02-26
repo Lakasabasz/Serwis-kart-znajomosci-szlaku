@@ -2,16 +2,16 @@
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @inject PageRefreshService RefreshService
 
-<div class="top-row pl-3 relative flex flex-wrap items-center content-between py-3 px-4 text-white">
-    <div class="container mx-auto sm:px-4 max-w-full mx-auto sm:px-4">
-        <a class="inline-block pt-1 pb-1 mr-4 text-lg whitespace-no-wrap" href="">Karta Znajomości Szlaku</a>
-        <button title="Navigation menu" class="py-1 px-2 text-md leading-normal bg-transparent border border-transparent rounded" @onclick="ToggleNavMenu">
-            <span class="px-5 py-1 border border-gray-600 rounded"></span>
+<div class="top-row relative flex flex-wrap items-center content-between py-3">
+    <div class="container mx-auto sm:px-2 max-w-full flex">
+        <a class="inline-block text-lg whitespace-no-wrap text-white" href="">Karta Znajomości Szlaku</a>
+        <button title="Navigation menu" class="pl-1 text-md leading-normal bg-transparent border border-transparent rounded" @onclick="ToggleNavMenu">
+            <span class="border border-gray-600 rounded material-icons text-white">menu</span>
         </button>
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass nav-scrollable">
     <nav class="flex-col">
         <div class="nav-item px-3">
             <NavLink class="inline-block py-2 px-4 no-underline" href="" Match="NavLinkMatch.All">
@@ -66,7 +66,7 @@
 @code {
     private bool _collapseNavMenu = false;
 
-    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
+    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : "visible";
 
     private UserData? _userData;
 
