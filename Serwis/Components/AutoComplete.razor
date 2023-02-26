@@ -1,0 +1,38 @@
+﻿@using Serwis.Tools
+
+<div class="relative">
+    <input type="text" autocomplete="off" placeholder="@Placeholder" @oninput="OnValueUpdate" />
+    <div class="absolute z-50 top-full inset-x-0">
+        @for (var index = 0; index < CompletionArray.Length; index++)
+        {
+            <div @onclick="(args) => OnCompletionClick(args, index)">@CompletionArray[index].ToString()</div>
+        }
+    </div>
+</div>
+
+@code {
+    private string Text { get; set; } = "";
+    private object[] CompletionArray = { };
+    
+    [Parameter]
+    public string? Placeholder { get; set; }
+    
+    [Parameter]
+    public IAutoCompletionProvider? CompletionProvider { get; set; }
+    
+    [Parameter]
+    public int? MaxCompletions { get; set; }
+
+    private void OnValueUpdate(ChangeEventArgs obj)
+    {
+        Text = obj.Value as string ?? "";
+        CompletionArray = CompletionProvider?.GetCompletions(Text, MaxCompletions ?? 5).ToArray() ?? Array.Empty<object>();
+        StateHasChanged();
+    }
+
+    private void OnCompletionClick(MouseEventArgs obj, int index)
+    {
+        throw new NotImplementedException();
+    }
+
+}
