@@ -1,19 +1,39 @@
 ﻿@using Serwis.Tools
 
 <div class="relative">
-    <input type="text" autocomplete="off" placeholder="@Placeholder" @oninput="OnValueUpdate" />
-    <div class="absolute z-50 top-full inset-x-0">
-        @for (var index = 0; index < CompletionArray.Length; index++)
+    <input type="text" autocomplete="off" placeholder="@Placeholder" @oninput="OnValueUpdate" @onkeydown="OnKeyPress" value="@Text" />
+    <div class="absolute z-50 top-full inset-x-0 bg-white @(_completionsVisible ? "visible" : "collapse")">
+        @for (var index = 0; index < _completionArray.Length; index++)
         {
-            <div @onclick="(args) => OnCompletionClick(args, index)">@CompletionArray[index].ToString()</div>
+            var localIndex = index;
+            <div @onclick="(args) => OnCompletionClick(args, localIndex)" @onmouseover="() => OnHover(localIndex)"
+                 class=@(SelectedIndex == localIndex ? "bg-violet-600 text-white" : "")>@_completionArray[index].ToString()</div>
         }
     </div>
 </div>
 
 @code {
     private string Text { get; set; } = "";
-    private object[] CompletionArray = { };
+    private object[] _completionArray = { };
+    private bool _completionsVisible = true;
+    private object? _selected;
     
+    private int? SelectedIndex { get; set; }
+
+    [Parameter]
+    public EventCallback? OnSelectionChanged { get; set; }
+    
+    [Parameter]
+    public object? Selected
+    {
+        get => _selected;
+        set
+        {
+            _selected = value;
+            OnSelectionChanged?.InvokeAsync();
+        }
+    }
+
     [Parameter]
     public string? Placeholder { get; set; }
     
@@ -26,13 +46,48 @@
     private void OnValueUpdate(ChangeEventArgs obj)
     {
         Text = obj.Value as string ?? "";
-        CompletionArray = CompletionProvider?.GetCompletions(Text, MaxCompletions ?? 5).ToArray() ?? Array.Empty<object>();
+        _completionArray = CompletionProvider?.GetCompletions(Text, MaxCompletions ?? 5).ToArray() ?? Array.Empty<object>();
+        _completionsVisible = true;
+        if (Selected?.ToString() is not null && (Selected.ToString() ?? "").Equals(Text)) Selected = null;
         StateHasChanged();
     }
 
     private void OnCompletionClick(MouseEventArgs obj, int index)
     {
-        throw new NotImplementedException();
+        Selected = _completionArray[index];
+        Text = Selected.ToString() ?? "";
+        _completionsVisible = false;
+        StateHasChanged();
+    }
+
+    private void OnKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "ArrowUp")
+        {
+            if (SelectedIndex is null or 0) SelectedIndex = _completionArray.Length;
+            SelectedIndex -= 1;
+            StateHasChanged();
+        }
+        else if (e.Key == "ArrowDown")
+        {
+            SelectedIndex ??= -1;
+            SelectedIndex = (SelectedIndex + 1) % _completionArray.Length;
+            StateHasChanged();
+        }
+        else if (e.Key == "Enter")
+        {
+            if (SelectedIndex is null) return;
+            Selected = _completionArray[SelectedIndex.Value];
+            Text = Selected.ToString() ?? "";
+            _completionsVisible = false;
+            StateHasChanged();
+        }
+    }
+
+    private void OnHover(int localIndex)
+    {
+        SelectedIndex = localIndex;
+        StateHasChanged();
     }
 
 }
