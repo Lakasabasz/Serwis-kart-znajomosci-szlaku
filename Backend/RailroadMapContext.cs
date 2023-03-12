@@ -27,11 +27,7 @@ public partial class RailroadMapContext : DbContext
     public virtual DbSet<RailroadLine> RailroadLines { get; set; }
 
     public virtual DbSet<RailroadPoint> RailroadPoints { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;user=RailroadUser;database=railroad_map", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.7.1-mariadb"));
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
