@@ -6,32 +6,42 @@
 @inject NavigationManager NavigationManager
 <PageTitle>Generator</PageTitle>
 
-<div class="d-flex flex-column">
-    <div class="d-flex flex-row fw-bold">
+<div class="flex flex-col">
+    <div class="flex flex-row font-bold items-center">
         <p class="me-2">Jesteś na etapie:</p>
-        <p class="me-2 text-success">Wyznaczanie ciągu stacji</p>
-        <p class="me-2 @(Stage > 0 ? "text-success" : "text-secondary")"><span class="oi oi-arrow-right"></span> Weryfikacja szlaków</p>
-        <p class="me-2 @(Stage > 1 ? "text-success" : "text-secondary")"><span class="oi oi-arrow-right"></span> Uzupełnienia informacji</p>
-        <p class="me-2 @(Stage > 2 ? "text-success" : "text-secondary")"><span class="oi oi-arrow-right"></span> Generowania raportu</p>
+        <p class="me-2 text-green-600">Wyznaczanie ciągu stacji</p>
+        <span class="material-icons @(Stage > 0 ? "text-green-600" : "text-sky-400")">arrow_forward</span>
+        <p class="me-2 @(Stage > 0 ? "text-green-600" : "text-sky-400")">Weryfikacja szlaków</p>
+        <span class="material-icons @(Stage > 0 ? "text-green-600" : "text-sky-400")">arrow_forward</span> 
+        <p class="me-2 @(Stage > 1 ? "text-green-600" : "text-sky-400")">Uzupełnienia informacji</p>
+        <span class="material-icons @(Stage > 0 ? "text-green-600" : "text-sky-400")">arrow_forward</span>
+        <p class="me-2 @(Stage > 2 ? "text-green-600" : "text-sky-400")">Generowania raportu</p>
     </div>
     @if (Stage == 0)
     {
         <p>Wymagane stacje:</p>
-        <div class="flex flex-row">
-            <AutoComplete CompletionProvider="@_provider" Placeholder="Stacja początkowa" />
-            <IntermidiateStation />
-            <span class="mx-2 material-icons">arrow_right_alt</span>
-            <AutoComplete />
+        <div class="flex flex-row flex-wrap mt-2">
+            <AutoComplete CompletionProvider="@_provider" Placeholder="Stacja początkowa"/>
+            <span class="material-icons">arrow_right_alt</span>
+            @for (int i = 0; i < _intermediateStations.Count; i++)
+            {
+                <IntermediateStation OnIntermediateStationCreated="@AddStation" OnIntermediateStationDeleted="@RemoveStation"
+                                     SelectedData="@_intermediateStations[i].Selected" Id="@i"
+                                     Used="@_intermediateStations[i].Used"/>
+            }
+            <AutoComplete Placeholder="Stacja końcowa"/>
         </div>
     }
-    <div class="d-flex">
-        <button @onclick="UpdateStage" class="btn-primary">Przełącz stan</button>
+    <div class="flex">
+        <button @onclick="UpdateStage" class="rounded bg-sky-500">Przełącz stan</button>
     </div>
 </div>
 
 @code {
     private UserData _userData = null!;
     private int _stage;
+
+    private List<IntermediateStationViewModel> _intermediateStations = new() { new() };
 
     private IAutoCompletionProvider _provider = new AutoCompletionTest();
     
@@ -44,13 +54,25 @@
             StateHasChanged();
         }
     }
-
-
+    
     protected override async Task OnInitializedAsync()
     {
         if (await LocalStorage.ContainKeyAsync(nameof(UserData)))
             _userData = await LocalStorage.GetItemAsync<UserData>(nameof(UserData));
         if(_userData?.Token is null) NavigationManager.NavigateTo("/login");
+    }
+
+    private void AddStation(int id)
+    {
+        _intermediateStations[id].Used = true;
+        _intermediateStations.Insert(id, new IntermediateStationViewModel());
+        _intermediateStations.Insert(id+2, new IntermediateStationViewModel());
+    }
+
+    private void RemoveStation(int id)
+    {
+        _intermediateStations.RemoveAt(id);
+        _intermediateStations.RemoveAt(id-1);
     }
 
     private void UpdateStage()

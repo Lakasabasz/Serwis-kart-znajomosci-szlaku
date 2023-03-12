@@ -1,7 +1,8 @@
 ﻿@using Serwis.Tools
 
 <div class="relative">
-    <input type="text" autocomplete="off" placeholder="@Placeholder" @oninput="OnValueUpdate" @onkeydown="OnKeyPress" value="@Text" />
+    <input type="text" autocomplete="off" placeholder="@Placeholder" @oninput="OnValueUpdate" @onkeydown="OnKeyPress" value="@Text"
+           class="border-gray-600 border-2"/>
     <div class="absolute z-50 top-full inset-x-0 bg-white @(_completionsVisible ? "visible" : "collapse")">
         @for (var index = 0; index < _completionArray.Length; index++)
         {
@@ -21,7 +22,7 @@
     private int? SelectedIndex { get; set; }
 
     [Parameter]
-    public EventCallback? OnSelectionChanged { get; set; }
+    public EventCallback<object?> OnSelectionChanged { get; set; }
     
     [Parameter]
     public object? Selected
@@ -29,8 +30,9 @@
         get => _selected;
         set
         {
+            if (_selected == value) return;
             _selected = value;
-            OnSelectionChanged?.InvokeAsync();
+            OnSelectionChanged.InvokeAsync(value);
         }
     }
 

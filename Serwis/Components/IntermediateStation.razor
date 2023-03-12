@@ -1,0 +1,41 @@
+﻿<div class="flex flex-row">
+    @if (Used)
+    {
+        <div class="flex flex-row">
+            <AutoComplete Selected=@SelectedData OnSelectionChanged=@SelectionChanged />
+            <button class="material-icons" @onclick="Delete">close</button>
+        </div>
+    }
+    else
+    {
+        <button class="material-icons" @onclick="Create">add</button>
+    }
+    <span class="material-icons">arrow_right_alt</span>
+</div>
+@code {
+    [Parameter] public bool Used { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public object? SelectedData { get; set; }
+    [Parameter] public EventCallback<int> OnIntermediateStationCreated { get; set; }
+    [Parameter] public EventCallback<int> OnIntermediateStationDeleted { get; set; }
+
+    private void SelectionChanged(object? value)
+    {
+        SelectedData = value;
+    }
+
+    private void Create()
+    {
+        Used = true;
+        OnIntermediateStationCreated.InvokeAsync(Id);
+        StateHasChanged();
+    }
+
+    private void Delete()
+    {
+        Used = false;
+        OnIntermediateStationDeleted.InvokeAsync(Id);
+        StateHasChanged();
+    }
+
+}
